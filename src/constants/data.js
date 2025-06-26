@@ -7,13 +7,13 @@ export const mockData = [
   {
     icon: icons.booking,
     label: 'Đặt khám',
-    screen: 'Booking',
+    screen: 'booking',
   },
-  {
-    icon: icons.history,
-    label: 'Lịch sử đặt khám',
-    screen: null,
-  },
+  // {
+  //   icon: icons.history,
+  //   label: 'Lịch sử đặt khám',
+  //   screen: null,
+  // },
   {
     icon: icons.person,
     label: 'Hồ sơ sức khỏe',
@@ -24,36 +24,36 @@ export const mockData = [
     label: 'Lịch sử tiêm chủng',
     screen: null,
   },
-  {
-    icon: icons.payment,
-    label: 'Thanh toán viện phí, đơn thuốc',
-    screen: null,
-  },
-  {
-    icon: icons.shield,
-    label: 'Cận lâm sàng khám bệnh ngoại trú',
-    screen: null,
-  },
+  // {
+  //   icon: icons.payment,
+  //   label: 'Thanh toán viện phí, đơn thuốc',
+  //   screen: null,
+  // },
+  // {
+  //   icon: icons.shield,
+  //   label: 'Cận lâm sàng khám bệnh ngoại trú',
+  //   screen: null,
+  // },
   {
     icon: icons.calendar,
     label: 'Xem thống kê',
-    screen: 'Report',
+    screen: 'report',
   },
-  {
-    icon: icons.wallet,
-    label: 'Hóa đơn GTGT',
-    screen: null,
-  },
-  {
-    icon: icons.run,
-    label: 'Theo dõi sức khỏe',
-    screen: null,
-  },
-  {
-    icon: icons.support,
-    label: 'Hỗ trợ',
-    screen: null,
-  },
+  // {
+  //   icon: icons.wallet,
+  //   label: 'Hóa đơn GTGT',
+  //   screen: null,
+  // },
+  // {
+  //   icon: icons.run,
+  //   label: 'Theo dõi sức khỏe',
+  //   screen: null,
+  // },
+  // {
+  //   icon: icons.support,
+  //   label: 'Hỗ trợ',
+  //   screen: null,
+  // },
 ];
 
 export const settings = [
