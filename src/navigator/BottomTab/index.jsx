@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image, StyleSheet, View } from 'react-native';
 import { Home, Menu, Notifications, Search } from '../../screens';
 import icons from '../../constants/icons';
+import { parseSizeHeight, parseSizeWidth } from '../../theme';
 
 const Tab = createBottomTabNavigator();
 
@@ -39,9 +40,9 @@ const TabIcon = ({ icon, focused }) => {
       <Image
         source={icon}
         style={{
-          width: 24,
-          height: 24,
-          tintColor: focused ? '#177de2' : '#8E8E93',
+          width: parseSizeWidth(32),
+          height: parseSizeHeight(32),
+          tintColor: focused ? '#177DE2' : '#8E8E93',
         }}
         resizeMode="contain"
       />
@@ -75,20 +76,19 @@ const BottomTab = () => {
 
 const styles = StyleSheet.create({
   tabBar: {
-    height: 70,
+    height: parseSizeHeight(60),
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 18,
+    paddingTop: parseSizeHeight(10),
   },
   tabIcon: {
-    height: 46,
-    width: 48,
+    height: parseSizeHeight(42),
+    width: parseSizeWidth(42),
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 4,
   },
 });
 

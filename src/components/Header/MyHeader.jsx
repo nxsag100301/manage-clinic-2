@@ -26,8 +26,7 @@ export default MyHeader;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: parseSizeWidth(16),
-    paddingVertical: parseSizeHeight(4),
-    marginBottom: parseSizeHeight(8),
+    paddingVertical: parseSizeHeight(8),
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -43,7 +42,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   headerTitle: {
-    fontSize: Sizes.text_subtitle1,
+    fontSize: Sizes.text_h6,
     fontWeight: 500,
   },
   fakeView: {
