@@ -54,7 +54,8 @@ authorizeAxiosInstance.interceptors.response.use(
         const refreshToken = await AsyncStorage.getItem('refresh_token');
         refreshTokenPromise = refreshTokenAPI(refreshToken)
           .then(data => {
-            return data?.accessToken;
+            console.log('check data: ', data);
+            return data?.access_token;
           })
           .catch(_error => {
             axiosReduxStore.dispatch(logOut());

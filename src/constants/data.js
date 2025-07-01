@@ -9,26 +9,26 @@ export const mockData = [
     label: 'Đặt khám',
     screen: 'booking',
   },
-  // {
-  //   icon: icons.history,
-  //   label: 'Lịch sử đặt khám',
-  //   screen: null,
-  // },
+  {
+    icon: icons.history,
+    label: 'Lịch sử khám',
+    screen: 'medicalHistory',
+  },
   {
     icon: icons.person,
     label: 'Hồ sơ sức khỏe',
     screen: null,
   },
-  {
-    icon: icons.history,
-    label: 'Lịch sử tiêm chủng',
-    screen: null,
-  },
   // {
-  //   icon: icons.payment,
-  //   label: 'Thanh toán viện phí, đơn thuốc',
+  //   icon: icons.history,
+  //   label: 'Lịch sử tiêm chủng',
   //   screen: null,
   // },
+  {
+    icon: icons.payment,
+    label: 'Lịch sử thanh toán',
+    screen: 'paymentHistory',
+  },
   // {
   //   icon: icons.shield,
   //   label: 'Cận lâm sàng khám bệnh ngoại trú',
@@ -60,33 +60,41 @@ export const settings = [
   {
     title: 'My Bookings',
     icon: icons.calendar,
+    screen: null,
   },
   {
     title: 'Payments',
     icon: icons.wallet,
+    screen: null,
   },
   {
     title: 'Profile',
     icon: icons.person,
+    screen: 'profile',
   },
   {
     title: 'Notifications',
     icon: icons.bell,
+    screen: null,
   },
   {
     title: 'Security',
     icon: icons.shield,
+    screen: null,
   },
   {
     title: 'Language',
     icon: icons.language,
+    screen: null,
   },
   {
     title: 'Help Center',
     icon: icons.info,
+    screen: null,
   },
   {
     title: 'Invite Friends',
     icon: icons.people,
+    screen: null,
   },
 ];

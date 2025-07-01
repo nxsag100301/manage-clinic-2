@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Image,
   KeyboardAvoidingView,
@@ -8,17 +8,30 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ScrollView,
 } from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import icons from '../../constants/icons';
 import { userLoginAPI } from '../../redux/slice/userSlice';
+import { getJson } from '../../api/auth';
 
 const Login = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
+
+  const [areaList, setAreaList] = useState([]);
+  const [positionList, setPositionList] = useState([]);
+
+  const [selectedArea, setSelectedArea] = useState(null);
+  const [selectedPosition, setSelectedPosition] = useState(null);
+
+  const [openArea, setOpenArea] = useState(false);
+  const [openPosition, setOpenPosition] = useState(false);
+
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -29,9 +42,34 @@ const Login = () => {
         setPassword('');
         setErrors({});
         setIsShowPassword(false);
+        setSelectedArea(null);
+        setSelectedPosition(null);
       };
     }, []),
   );
+
+  useEffect(() => {
+    const fetchPosition = async () => {
+      const res = await getJson('DM_VaiTro.json');
+      const filtered = res.filter(item => item.active);
+      const mapped = filtered.map(item => ({
+        label: item.ten,
+        value: item.id,
+      }));
+      setPositionList(mapped);
+    };
+    const fetchArea = async () => {
+      const res = await getJson('DM_Khu.json');
+      const filtered = res.filter(item => item.active);
+      const mapped = filtered.map(item => ({
+        label: item.ten,
+        value: item.id,
+      }));
+      setAreaList(mapped);
+    };
+    fetchArea();
+    fetchPosition();
+  }, []);
 
   const clearFieldError = field => {
     setErrors(prev => {
@@ -67,8 +105,8 @@ const Login = () => {
       username: 'Admin',
       password: 'MatKhauMoi',
       idKho: 0,
-      idKhu: 0,
-      idVt: 0,
+      idKhu: selectedArea || 0,
+      idVt: selectedPosition || 0,
     };
     try {
       await dispatch(userLoginAPI(data));
@@ -78,7 +116,10 @@ const Login = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      keyboardShouldPersistTaps="handled"
+    >
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardView}
@@ -120,25 +161,47 @@ const Login = () => {
               if (errors.password) clearFieldError('password');
             }}
           />
-          {isShowPassword ? (
-            <TouchableOpacity
-              onPress={() => setIsShowPassword(false)}
-              style={styles.eyeIcon}
-            >
-              <Image source={icons.eyeOpen} style={styles.icon} />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              onPress={() => setIsShowPassword(true)}
-              style={styles.eyeIcon}
-            >
-              <Image source={icons.eyeOff} style={styles.icon} />
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity
+            onPress={() => setIsShowPassword(!isShowPassword)}
+            style={styles.eyeIcon}
+          >
+            <Image
+              source={isShowPassword ? icons.eyeOpen : icons.eyeOff}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
         </View>
         {errors.password?.message && (
           <Text style={styles.error}>{errors.password.message}</Text>
         )}
+
+        <Text style={[styles.label, { marginTop: 16 }]}>Khu</Text>
+        <DropDownPicker
+          open={openArea}
+          value={selectedArea}
+          items={areaList}
+          setOpen={setOpenArea}
+          setValue={setSelectedArea}
+          setItems={setAreaList}
+          placeholder="Chọn khu"
+          style={styles.dropdown}
+          dropDownContainerStyle={styles.dropdownContainer}
+          zIndex={3000}
+        />
+
+        <Text style={[styles.label, { marginTop: 16 }]}>Vị trí</Text>
+        <DropDownPicker
+          open={openPosition}
+          value={selectedPosition}
+          items={positionList}
+          setOpen={setOpenPosition}
+          setValue={setSelectedPosition}
+          setItems={setPositionList}
+          placeholder="Chọn vị trí"
+          style={styles.dropdown}
+          dropDownContainerStyle={styles.dropdownContainer}
+          zIndex={2000}
+        />
 
         <TouchableOpacity style={styles.loginBtn} onPress={handleSubmit}>
           <Text style={styles.loginBtnText}>Login</Text>
@@ -151,15 +214,15 @@ const Login = () => {
           <Text style={styles.signupText}>Create an account?</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingHorizontal: 24,
+    padding: 24,
     backgroundColor: '#fff',
+    flexGrow: 1,
   },
   keyboardView: {
     flex: 1,
@@ -188,6 +251,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 12,
     color: '#000',
+    marginBottom: 4,
+  },
+  dropdown: {
+    borderColor: '#6B7280',
+    borderRadius: 12,
+  },
+  dropdownContainer: {
+    borderColor: '#6B7280',
   },
   error: {
     color: '#dc2626',

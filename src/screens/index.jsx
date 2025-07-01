@@ -5,5 +5,23 @@ import Search from './Search';
 import Login from './Login';
 import Report from './Report';
 import Booking from './Booking';
+import Profile from './Profile';
+import MedicalHistory from './MedicalHistory';
+import DetailMedicalHistory from './DetailMedicalHistory';
+import PaymentHistory from './PaymentHistory';
+import DetailPaymentHistory from './DetailPaymentHistory';
 
-export { Home, Menu, Notifications, Search, Login, Report, Booking };
+export {
+  Home,
+  Menu,
+  Notifications,
+  Search,
+  Login,
+  Report,
+  Booking,
+  Profile,
+  MedicalHistory,
+  DetailMedicalHistory,
+  PaymentHistory,
+  DetailPaymentHistory,
+};

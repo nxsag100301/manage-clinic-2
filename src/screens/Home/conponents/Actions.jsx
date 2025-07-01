@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 16,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   gridItem: {

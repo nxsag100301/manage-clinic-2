@@ -1,8 +1,17 @@
+import BottomTab from './BottomTab';
 import { createRef } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import BottomTab from './BottomTab';
-import { Booking, Login, Report } from '../screens';
+import {
+  Booking,
+  DetailMedicalHistory,
+  DetailPaymentHistory,
+  Login,
+  MedicalHistory,
+  PaymentHistory,
+  Profile,
+  Report,
+} from '../screens';
 import { useSelector } from 'react-redux';
 
 export const navigationRef = createRef();
@@ -25,6 +34,17 @@ const Navigation = () => {
             <Stack.Screen name="bottomTab" component={BottomTab} />
             <Stack.Screen name="booking" component={Booking} />
             <Stack.Screen name="report" component={Report} />
+            <Stack.Screen name="profile" component={Profile} />
+            <Stack.Screen name="medicalHistory" component={MedicalHistory} />
+            <Stack.Screen
+              name="detailMedicalHistory"
+              component={DetailMedicalHistory}
+            />
+            <Stack.Screen name="paymentHistory" component={PaymentHistory} />
+            <Stack.Screen
+              name="detailPaymentHistory"
+              component={DetailPaymentHistory}
+            />
           </>
         ) : (
           <>

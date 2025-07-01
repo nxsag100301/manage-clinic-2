@@ -13,6 +13,7 @@ import { logOut } from '../../redux/slice/userSlice';
 import images from '../../constants/images';
 import { settings } from '../../constants/data';
 import { parseSizeHeight, parseSizeWidth, Sizes } from '../../theme';
+import { useNavigation } from '@react-navigation/native';
 
 const SettingItems = ({
   icon,
@@ -20,20 +21,25 @@ const SettingItems = ({
   onPress,
   textStyle,
   showArrow = true,
-}) => (
-  <TouchableOpacity onPress={onPress} style={styles.itemRow}>
-    <View style={styles.itemLeft}>
-      <Image source={icon} style={styles.itemIcon} />
-      <Text style={[styles.itemText, textStyle && { color: 'red' }]}>
-        {title}
-      </Text>
-    </View>
-    {showArrow && <Image source={icons.rightArrow} style={styles.arrowIcon} />}
-  </TouchableOpacity>
-);
+}) => {
+  return (
+    <TouchableOpacity onPress={onPress} style={styles.itemRow}>
+      <View style={styles.itemLeft}>
+        <Image source={icon} style={styles.itemIcon} />
+        <Text style={[styles.itemText, textStyle && { color: 'red' }]}>
+          {title}
+        </Text>
+      </View>
+      {showArrow && (
+        <Image source={icons.rightArrow} style={styles.arrowIcon} />
+      )}
+    </TouchableOpacity>
+  );
+};
 
 const Menu = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   const handleLogout = async () => {
     await AsyncStorage.removeItem('access_token');
@@ -56,9 +62,6 @@ const Menu = () => {
       <View style={styles.avatarSection}>
         <View style={styles.avatarWrapper}>
           <Image source={images.avatar} style={styles.avatarImage} />
-          <TouchableOpacity style={styles.editIconWrapper}>
-            <Image source={icons.edit} style={styles.editIcon} />
-          </TouchableOpacity>
           <Text style={styles.userName}>{user?.TenNhanVien}</Text>
         </View>
       </View>
@@ -70,7 +73,13 @@ const Menu = () => {
 
       <View style={styles.sectionWithBorder}>
         {settings.slice(2).map((item, index) => (
-          <SettingItems key={index} {...item} />
+          <SettingItems
+            key={index}
+            {...item}
+            onPress={() =>
+              item.screen ? navigation.navigate(item.screen) : {}
+            }
+          />
         ))}
       </View>
       <SettingItems
@@ -111,21 +120,11 @@ const styles = StyleSheet.create({
   avatarWrapper: {
     alignItems: 'center',
     maxWidth: parseSizeWidth(200),
-    position: 'relative',
   },
   avatarImage: {
-    width: parseSizeWidth(176),
-    height: parseSizeHeight(176),
+    width: parseSizeWidth(150),
+    height: parseSizeHeight(150),
     borderRadius: 88,
-  },
-  editIconWrapper: {
-    position: 'absolute',
-    top: parseSizeHeight(144),
-    right: parseSizeWidth(24),
-  },
-  editIcon: {
-    width: parseSizeWidth(36),
-    height: parseSizeHeight(36),
   },
   userName: {
     marginTop: parseSizeHeight(8),
