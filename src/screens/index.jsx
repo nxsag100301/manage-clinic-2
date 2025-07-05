@@ -10,6 +10,7 @@ import MedicalHistory from './MedicalHistory';
 import DetailMedicalHistory from './DetailMedicalHistory';
 import PaymentHistory from './PaymentHistory';
 import DetailPaymentHistory from './DetailPaymentHistory';
+import TestPdf from './TestPdf';
 
 export {
   Home,
@@ -24,4 +25,5 @@ export {
   DetailMedicalHistory,
   PaymentHistory,
   DetailPaymentHistory,
+  TestPdf,
 };

@@ -11,6 +11,7 @@ import {
   PaymentHistory,
   Profile,
   Report,
+  TestPdf,
 } from '../screens';
 import { useSelector } from 'react-redux';
 
@@ -45,6 +46,7 @@ const Navigation = () => {
               name="detailPaymentHistory"
               component={DetailPaymentHistory}
             />
+            <Stack.Screen name="testPdf" component={TestPdf} />
           </>
         ) : (
           <>
