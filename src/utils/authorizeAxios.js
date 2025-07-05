@@ -54,7 +54,6 @@ authorizeAxiosInstance.interceptors.response.use(
         const refreshToken = await AsyncStorage.getItem('refresh_token');
         refreshTokenPromise = refreshTokenAPI(refreshToken)
           .then(data => {
-            console.log('check data: ', data);
             return data?.access_token;
           })
           .catch(_error => {

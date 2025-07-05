@@ -17,7 +17,7 @@ export const mockData = [
   {
     icon: icons.person,
     label: 'Hồ sơ sức khỏe',
-    screen: null,
+    screen: 'testPdf',
   },
   // {
   //   icon: icons.history,

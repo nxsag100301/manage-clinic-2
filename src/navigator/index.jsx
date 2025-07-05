@@ -13,6 +13,7 @@ import {
   Report,
 } from '../screens';
 import { useSelector } from 'react-redux';
+import TestPdf from '../screens/TestPdf';
 
 export const navigationRef = createRef();
 
@@ -45,6 +46,7 @@ const Navigation = () => {
               name="detailPaymentHistory"
               component={DetailPaymentHistory}
             />
+            <Stack.Screen name="testPdf" component={TestPdf} />
           </>
         ) : (
           <>
