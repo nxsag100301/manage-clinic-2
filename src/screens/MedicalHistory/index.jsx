@@ -150,8 +150,7 @@ export default MedicalHistory;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: parseSizeWidth(16),
-    backgroundColor: '#f2f5f9',
+    paddingVertical: parseSizeHeight(16),
   },
   filterBox: {
     backgroundColor: '#fff',
@@ -161,8 +160,9 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOpacity: 0.05,
     shadowRadius: 4,
-    elevation: 2,
+    elevation: 4,
     zIndex: 1000, // Để dropdown không bị che
+    marginHorizontal: parseSizeWidth(16),
   },
   row: {
     flexDirection: 'row',
@@ -198,9 +198,10 @@ const styles = StyleSheet.create({
     borderRadius: parseSizeWidth(10),
     marginBottom: parseSizeHeight(12),
     shadowColor: '#000',
-    shadowOpacity: 0.06,
-    shadowRadius: 3,
-    elevation: 2,
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 4,
+    marginHorizontal: parseSizeWidth(16),
   },
   date: {
     fontWeight: 'bold',

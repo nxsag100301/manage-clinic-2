@@ -16,19 +16,17 @@ import { useDispatch } from 'react-redux';
 import icons from '../../constants/icons';
 import { userLoginAPI } from '../../redux/slice/userSlice';
 import { getJson } from '../../api/auth';
+import { parseSizeWidth, parseSizeHeight } from '../../theme';
 
-const Login = () => {
+const LoginManager = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
-
   const [areaList, setAreaList] = useState([]);
   const [positionList, setPositionList] = useState([]);
-
   const [selectedArea, setSelectedArea] = useState(null);
   const [selectedPosition, setSelectedPosition] = useState(null);
-
   const [openArea, setOpenArea] = useState(false);
   const [openPosition, setOpenPosition] = useState(false);
 
@@ -38,7 +36,7 @@ const Login = () => {
   useFocusEffect(
     useCallback(() => {
       return () => {
-        setEmail('');
+        setUsername('');
         setPassword('');
         setErrors({});
         setIsShowPassword(false);
@@ -49,26 +47,31 @@ const Login = () => {
   );
 
   useEffect(() => {
-    const fetchPosition = async () => {
-      const res = await getJson('DM_VaiTro.json');
-      const filtered = res.filter(item => item.active);
-      const mapped = filtered.map(item => ({
-        label: item.ten,
-        value: item.id,
-      }));
-      setPositionList(mapped);
+    const fetchData = async () => {
+      const [resArea, resPosition] = await Promise.all([
+        getJson('DM_Khu.json'),
+        getJson('DM_VaiTro.json'),
+      ]);
+
+      setAreaList(
+        resArea
+          .filter(item => item.active)
+          .map(item => ({
+            label: item.ten,
+            value: item.id,
+          })),
+      );
+
+      setPositionList(
+        resPosition
+          .filter(item => item.active)
+          .map(item => ({
+            label: item.ten,
+            value: item.id,
+          })),
+      );
     };
-    const fetchArea = async () => {
-      const res = await getJson('DM_Khu.json');
-      const filtered = res.filter(item => item.active);
-      const mapped = filtered.map(item => ({
-        label: item.ten,
-        value: item.id,
-      }));
-      setAreaList(mapped);
-    };
-    fetchArea();
-    fetchPosition();
+    fetchData();
   }, []);
 
   const clearFieldError = field => {
@@ -88,12 +91,12 @@ const Login = () => {
 
   const handleValidate = () => {
     let isValid = true;
-    if (!email) {
-      setFieldError('email', 'Email is required');
+    if (!username) {
+      setFieldError('username', 'Tên đăng nhập không được để trống');
       isValid = false;
     }
     if (!password) {
-      setFieldError('password', 'Password is required');
+      setFieldError('password', 'Mật khẩu không được để trống');
       isValid = false;
     }
     return isValid;
@@ -124,35 +127,44 @@ const Login = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardView}
       >
-        <Text style={styles.title}>Login</Text>
-        <Text style={styles.subtitle}>Welcome back to the app</Text>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backBtn}
+        >
+          <Image source={icons.back} style={styles.backIcon} />
+        </TouchableOpacity>
 
-        <Text style={styles.label}>Email</Text>
+        <Text style={styles.title}>Đăng nhập Quản trị</Text>
+        <Text style={styles.subtitle}>Chào mừng bạn quay lại SixOs</Text>
+
+        <Text style={styles.label}>Tên đăng nhập</Text>
         <TextInput
           style={styles.input}
-          placeholder="Example@gmail.com"
+          placeholder="Tên đăng nhập"
           placeholderTextColor="#6B7280"
-          value={email}
+          value={username}
           onChangeText={text => {
-            setEmail(text);
-            if (errors.email) clearFieldError('email');
+            setUsername(text);
+            if (errors.username) clearFieldError('username');
           }}
         />
-        {errors.email?.message && (
-          <Text style={styles.error}>{errors.email.message}</Text>
+        {errors.username?.message && (
+          <Text style={styles.error}>{errors.username.message}</Text>
         )}
 
         <View style={styles.passwordHeader}>
-          <Text style={styles.label}>Password</Text>
-          <TouchableOpacity>
-            <Text style={styles.forgotText}>Forgot Password?</Text>
+          <Text style={styles.label}>Mật khẩu</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('forgotPassword')}
+          >
+            <Text style={styles.forgotText}>Quên mật khẩu?</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.passwordInputContainer}>
           <TextInput
             style={styles.input}
-            placeholder="Your password"
+            placeholder="Mật khẩu"
             placeholderTextColor="#6B7280"
             secureTextEntry={!isShowPassword}
             value={password}
@@ -175,7 +187,7 @@ const Login = () => {
           <Text style={styles.error}>{errors.password.message}</Text>
         )}
 
-        <Text style={[styles.label, { marginTop: 16 }]}>Khu</Text>
+        <Text style={[styles.label, styles.marginTop16]}>Khu</Text>
         <DropDownPicker
           open={openArea}
           value={selectedArea}
@@ -189,7 +201,7 @@ const Login = () => {
           zIndex={3000}
         />
 
-        <Text style={[styles.label, { marginTop: 16 }]}>Vị trí</Text>
+        <Text style={[styles.label, styles.marginTop16]}>Vị trí</Text>
         <DropDownPicker
           open={openPosition}
           value={selectedPosition}
@@ -204,14 +216,14 @@ const Login = () => {
         />
 
         <TouchableOpacity style={styles.loginBtn} onPress={handleSubmit}>
-          <Text style={styles.loginBtnText}>Login</Text>
+          <Text style={styles.loginBtnText}>Đăng nhập</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => navigation.navigate('SignUp')}
           style={styles.signupBtn}
         >
-          <Text style={styles.signupText}>Create an account?</Text>
+          <Text style={styles.signupText}>Chưa có tài khoản?</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </ScrollView>
@@ -220,95 +232,111 @@ const Login = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 24,
+    padding: parseSizeWidth(24),
     backgroundColor: '#fff',
     flexGrow: 1,
   },
   keyboardView: {
     flex: 1,
   },
+  backBtn: {
+    marginBottom: parseSizeHeight(10),
+    alignSelf: 'flex-start',
+  },
+  backIcon: {
+    width: parseSizeWidth(12),
+    height: parseSizeHeight(24),
+  },
   title: {
-    fontSize: 28,
+    fontSize: parseSizeWidth(26),
     fontWeight: 'bold',
-    marginTop: 40,
-    marginBottom: 16,
-    color: '#000',
+    marginTop: parseSizeHeight(12),
+    marginBottom: parseSizeHeight(12),
+    color: '#1E293B',
+    textAlign: 'center',
   },
   subtitle: {
-    fontSize: 18,
-    color: '#4B5563',
-    marginBottom: 40,
+    fontSize: parseSizeWidth(16),
+    color: '#6B7280',
+    marginBottom: parseSizeHeight(32),
+    textAlign: 'center',
   },
   label: {
-    fontSize: 16,
-    marginBottom: 4,
-    color: '#000',
+    fontSize: parseSizeWidth(15),
+    marginBottom: parseSizeHeight(6),
+    color: '#111827',
   },
   input: {
-    height: 56,
-    borderRadius: 12,
-    borderColor: '#6B7280',
+    height: parseSizeHeight(52),
+    borderRadius: parseSizeWidth(10),
+    borderColor: '#D1D5DB',
     borderWidth: 1,
-    paddingHorizontal: 12,
-    color: '#000',
-    marginBottom: 4,
+    paddingHorizontal: parseSizeWidth(14),
+    fontSize: parseSizeWidth(15),
+    color: '#111827',
+    backgroundColor: '#F9FAFB',
   },
   dropdown: {
-    borderColor: '#6B7280',
-    borderRadius: 12,
+    borderColor: '#D1D5DB',
+    borderRadius: parseSizeWidth(10),
+    backgroundColor: '#F9FAFB',
   },
   dropdownContainer: {
-    borderColor: '#6B7280',
+    borderColor: '#D1D5DB',
   },
   error: {
-    color: '#dc2626',
-    marginTop: 4,
+    color: '#DC2626',
+    marginTop: parseSizeHeight(4),
+    fontSize: parseSizeWidth(13),
   },
   passwordHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 24,
-    marginBottom: 4,
+    marginTop: parseSizeHeight(20),
+    marginBottom: parseSizeHeight(4),
   },
   forgotText: {
-    color: '#2563EB',
-    fontSize: 14,
+    color: '#3B82F6',
+    fontSize: parseSizeWidth(14),
   },
   passwordInputContainer: {
     position: 'relative',
   },
   eyeIcon: {
     position: 'absolute',
-    top: 14,
-    right: 12,
+    top: parseSizeHeight(14),
+    right: parseSizeWidth(12),
   },
   icon: {
-    width: 24,
-    height: 24,
+    width: parseSizeWidth(22),
+    height: parseSizeHeight(22),
     tintColor: '#6B7280',
   },
   loginBtn: {
-    marginTop: 24,
-    backgroundColor: '#2563EB',
-    height: 56,
-    borderRadius: 30,
+    marginTop: parseSizeHeight(28),
+    backgroundColor: '#3B82F6',
+    height: parseSizeHeight(52),
+    borderRadius: parseSizeWidth(30),
     justifyContent: 'center',
     alignItems: 'center',
   },
   loginBtnText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: parseSizeWidth(16),
     fontWeight: '600',
   },
   signupBtn: {
-    marginTop: 24,
+    marginTop: parseSizeHeight(20),
     alignItems: 'center',
   },
   signupText: {
-    fontSize: 16,
-    color: '#2563EB',
+    fontSize: parseSizeWidth(15),
+    color: '#3B82F6',
     fontWeight: 'bold',
+  },
+  marginTop16: {
+    marginTop: parseSizeHeight(16),
   },
 });
 
-export default Login;
+export default LoginManager;

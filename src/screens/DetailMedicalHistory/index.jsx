@@ -184,7 +184,6 @@ export default DetailMedicalHistory;
 const styles = StyleSheet.create({
   tabContainer: {
     padding: parseSizeWidth(16),
-    backgroundColor: '#f4f6f9',
     flex: 1,
   },
   card: {

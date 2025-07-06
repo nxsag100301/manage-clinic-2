@@ -1,16 +1,20 @@
 import BottomTab from './BottomTab';
 import { createRef } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   Booking,
   DetailMedicalHistory,
   DetailPaymentHistory,
+  ForgotPassword,
   Login,
+  LoginCustomer,
+  LoginManager,
   MedicalHistory,
   PaymentHistory,
   Profile,
   Report,
+  StartScreen,
   TestPdf,
 } from '../screens';
 import { useSelector } from 'react-redux';
@@ -19,12 +23,21 @@ export const navigationRef = createRef();
 
 const Stack = createNativeStackNavigator();
 
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: 'white',
+  },
+};
+
 const Navigation = () => {
   const user = useSelector(state => state.user.currentUser);
   const isLogin = !!user;
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer ref={navigationRef} theme={MyTheme}>
       <Stack.Navigator
+        initialRouteName={'startScreen'}
         screenOptions={{
           headerShown: false,
           gestureEnabled: false,
@@ -50,7 +63,10 @@ const Navigation = () => {
           </>
         ) : (
           <>
-            <Stack.Screen name="login" component={Login} />
+            <Stack.Screen name="startScreen" component={StartScreen} />
+            <Stack.Screen name="loginManager" component={LoginManager} />
+            <Stack.Screen name="loginCustomer" component={LoginCustomer} />
+            <Stack.Screen name="forgotPassword" component={ForgotPassword} />
           </>
         )}
       </Stack.Navigator>

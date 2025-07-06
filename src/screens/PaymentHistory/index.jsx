@@ -153,11 +153,9 @@ export default PaymentHistory;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f6f9fc',
   },
   filterContainer: {
     padding: parseSizeWidth(16),
-    backgroundColor: '#fff',
   },
   dateRow: {
     flexDirection: 'row',
@@ -172,7 +170,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: parseSizeWidth(8),
-    backgroundColor: '#f9f9f9',
     justifyContent: 'center',
   },
   dateInputText: {
@@ -187,7 +184,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: parseSizeWidth(12),
     paddingVertical: parseSizeHeight(10),
     fontSize: parseSizeWidth(14),
-    backgroundColor: '#f9f9f9',
     marginRight: parseSizeWidth(8),
   },
   searchRow: {

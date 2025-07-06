@@ -156,7 +156,6 @@ const Report = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f3f4f6',
     padding: 16,
     flexGrow: 1,
   },
