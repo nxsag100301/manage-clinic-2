@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "746584613679",
+    "project_id": "clinic-dbadc",
+    "storage_bucket": "clinic-dbadc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746584613679:android:184ec326f7966b5891b7da",
+        "android_client_info": {
+          "package_name": "com.sixos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIQ4-LeJ-6p_u4CJ-McZBjXCaywqflLiU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -7,7 +7,6 @@ import {
   DetailMedicalHistory,
   DetailPaymentHistory,
   ForgotPassword,
-  Login,
   LoginCustomer,
   LoginManager,
   MedicalHistory,
@@ -18,6 +17,8 @@ import {
   TestPdf,
 } from '../screens';
 import { useSelector } from 'react-redux';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet } from 'react-native';
 
 export const navigationRef = createRef();
 
@@ -37,7 +38,7 @@ const Navigation = () => {
   return (
     <NavigationContainer ref={navigationRef} theme={MyTheme}>
       <Stack.Navigator
-        initialRouteName={'startScreen'}
+        initialRouteName={isLogin ? 'bottomTab' : 'startScreen'}
         screenOptions={{
           headerShown: false,
           gestureEnabled: false,

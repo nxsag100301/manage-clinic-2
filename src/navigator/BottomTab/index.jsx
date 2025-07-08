@@ -76,7 +76,7 @@ const BottomTab = () => {
 
 const styles = StyleSheet.create({
   tabBar: {
-    height: parseSizeHeight(60),
+    height: parseSizeHeight(75),
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
