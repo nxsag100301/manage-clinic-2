@@ -1,11 +1,14 @@
-/* eslint-disable react-native/no-inline-styles */
-import { Alert, StatusBar, StyleSheet, useColorScheme } from 'react-native';
+import { Alert, StatusBar, StyleSheet } from 'react-native';
 import Navigation from './navigator';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import messaging from '@react-native-firebase/messaging';
 import { useEffect } from 'react';
+import LoadingScreen from './components/Loading/LoadingScreen';
+import { useSelector } from 'react-redux';
 
 const Index = () => {
+  const { globalLoading } = useSelector(state => state.loading);
+
   const requestUserPermission = async () => {
     const authStatus = await messaging().requestPermission();
     const enabled =
@@ -37,21 +40,17 @@ const Index = () => {
 
     return unsubscribe;
   }, []);
-  const colorScheme = useColorScheme();
   return (
-    <SafeAreaView
-      edges={['top', 'left', 'right']}
-      style={[
-        styles.container,
-        { backgroundColor: colorScheme === 'dark' ? '#000' : '#fff' },
-      ]}
-    >
-      <StatusBar
-        barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'}
-        backgroundColor={colorScheme === 'dark' ? '#121212' : '#ffffff'}
-      />
-      <Navigation />
-    </SafeAreaView>
+    <>
+      <SafeAreaView
+        edges={['top', 'left', 'right', 'bottom']}
+        style={styles.container}
+      >
+        <StatusBar barStyle={'dark-content'} backgroundColor="white" />
+        <Navigation />
+      </SafeAreaView>
+      <LoadingScreen loading={globalLoading} />
+    </>
   );
 };
 
@@ -60,5 +59,6 @@ export default Index;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
 });

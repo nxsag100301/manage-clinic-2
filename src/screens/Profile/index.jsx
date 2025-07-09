@@ -9,17 +9,21 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { parseSizeWidth, parseSizeHeight } from '../../theme';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import dayjs from 'dayjs';
 import MyHeader from '../../components/Header/MyHeader';
+import { parseSizeWidth, parseSizeHeight } from '../../theme';
+
+const genderOptions = [
+  { label: 'Nam', value: 'male' },
+  { label: 'Nữ', value: 'female' },
+];
 
 const RenderField = ({ label, value, onChange, disabled = false }) => (
   <View style={styles.fieldContainer}>
     <Text style={styles.label}>{label}</Text>
     <TextInput
-      style={[
-        styles.input,
-        disabled && { backgroundColor: '#f0f0f0', color: '#999' },
-      ]}
+      style={styles.input}
       placeholder={`Nhập ${label.toLowerCase()}`}
       value={value}
       editable={!disabled}
@@ -28,12 +32,36 @@ const RenderField = ({ label, value, onChange, disabled = false }) => (
   </View>
 );
 
+const GenderSelector = ({ selectedGender, onSelect }) => (
+  <View style={styles.genderContainer}>
+    {genderOptions.map(option => {
+      const isSelected = selectedGender === option.value;
+      return (
+        <TouchableOpacity
+          key={option.value}
+          onPress={() => onSelect(option.value)}
+          style={[styles.genderButton, isSelected && styles.genderButtonActive]}
+        >
+          <Text
+            style={[
+              styles.genderButtonText,
+              isSelected && styles.genderButtonTextActive,
+            ]}
+          >
+            {option.label}
+          </Text>
+        </TouchableOpacity>
+      );
+    })}
+  </View>
+);
+
 const Profile = () => {
   const [profileData, setProfileData] = useState({
     patientCode: 'BN123456',
     fullName: '',
     birthDate: '',
-    gender: '',
+    gender: 'male',
     email: '',
     insuranceCode: '',
     cccd: '',
@@ -44,24 +72,37 @@ const Profile = () => {
     relativePhone: '',
   });
 
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [birthDateValue, setBirthDateValue] = useState(new Date());
+
   const handleChange = (key, value) => {
     setProfileData(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleBirthDateSelect = (event, selectedDate) => {
+    setShowDatePicker(false);
+    if (selectedDate) {
+      setBirthDateValue(selectedDate);
+      handleChange('birthDate', dayjs(selectedDate).format('DD/MM/YYYY'));
+    }
   };
 
   return (
     <>
       <MyHeader headerTitle="Thông tin cá nhân" />
       <KeyboardAvoidingView
-        style={styles.keyboardAvoidingViewStyle}
+        style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={parseSizeHeight(80)}
       >
         <ScrollView
           style={styles.container}
           contentContainerStyle={styles.content}
+          keyboardShouldPersistTaps="handled"
         >
           <View style={styles.card}>
             <Text style={styles.cardTitle}>Thông tin bệnh nhân</Text>
+
             <RenderField
               label="Mã bệnh nhân"
               value={profileData.patientCode}
@@ -72,16 +113,29 @@ const Profile = () => {
               value={profileData.fullName}
               onChange={text => handleChange('fullName', text)}
             />
-            <RenderField
-              label="Ngày sinh"
-              value={profileData.birthDate}
-              onChange={text => handleChange('birthDate', text)}
-            />
-            <RenderField
-              label="Giới tính"
-              value={profileData.gender}
-              onChange={text => handleChange('gender', text)}
-            />
+
+            {/* Ngày sinh */}
+
+            <View style={styles.fieldContainer}>
+              <Text style={styles.label}>Ngày sinh</Text>
+              <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+                <View style={styles.input}>
+                  <Text style={styles.birthText}>
+                    {profileData.birthDate || 'Chọn ngày sinh'}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+
+            {/* Giới tính */}
+            <View style={styles.fieldContainer}>
+              <Text style={styles.label}>Giới tính</Text>
+              <GenderSelector
+                selectedGender={profileData.gender}
+                onSelect={value => handleChange('gender', value)}
+              />
+            </View>
+
             <RenderField
               label="Email"
               value={profileData.email}
@@ -132,6 +186,17 @@ const Profile = () => {
             <Text style={styles.saveButtonText}>Lưu thay đổi</Text>
           </TouchableOpacity>
         </ScrollView>
+
+        {/* DateTimePicker hiển thị giống như Report */}
+        {showDatePicker && (
+          <DateTimePicker
+            value={birthDateValue}
+            mode="date"
+            display={Platform.OS === 'ios' ? 'inline' : 'default'}
+            onChange={handleBirthDateSelect}
+            maximumDate={new Date()}
+          />
+        )}
       </KeyboardAvoidingView>
     </>
   );
@@ -140,12 +205,7 @@ const Profile = () => {
 export default Profile;
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#f2f5f9',
-  },
-  keyboardAvoidingViewStyle: {
-    flex: 1,
-  },
+  container: {},
   content: {
     padding: parseSizeWidth(16),
     paddingBottom: parseSizeHeight(40),
@@ -196,5 +256,30 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '600',
     fontSize: parseSizeWidth(16),
+  },
+  genderContainer: {
+    flexDirection: 'row',
+    gap: parseSizeWidth(10),
+  },
+  genderButton: {
+    flex: 1,
+    paddingVertical: parseSizeHeight(10),
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: parseSizeWidth(8),
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  genderButtonActive: {
+    backgroundColor: '#1E90FF',
+    borderColor: '#1E90FF',
+  },
+  genderButtonText: {
+    color: '#333',
+    fontWeight: '500',
+  },
+  genderButtonTextActive: {
+    color: '#fff',
+    fontWeight: '600',
   },
 });

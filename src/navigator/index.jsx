@@ -17,8 +17,6 @@ import {
   TestPdf,
 } from '../screens';
 import { useSelector } from 'react-redux';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { StyleSheet } from 'react-native';
 
 export const navigationRef = createRef();
 

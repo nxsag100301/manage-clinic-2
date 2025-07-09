@@ -17,6 +17,8 @@ import icons from '../../constants/icons';
 import { userLoginAPI } from '../../redux/slice/userSlice';
 import { getJson } from '../../api/auth';
 import { parseSizeWidth, parseSizeHeight } from '../../theme';
+import LoadingScreen from '../../components/Loading/LoadingScreen';
+import { setGlobalLoading } from '../../redux/slice/loadingSlice';
 
 const LoginManager = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
@@ -104,6 +106,7 @@ const LoginManager = () => {
 
   const handleSubmit = async () => {
     // if (!handleValidate()) return;
+    dispatch(setGlobalLoading(true));
     const data = {
       username: 'Admin',
       password: 'MatKhauMoi',
@@ -115,14 +118,13 @@ const LoginManager = () => {
       await dispatch(userLoginAPI(data));
     } catch (error) {
       console.log('Login error: ', error?.response?.data || error.message);
+    } finally {
+      dispatch(setGlobalLoading(false));
     }
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.container}
-      keyboardShouldPersistTaps="handled"
-    >
+    <View style={styles.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardView}
@@ -198,7 +200,7 @@ const LoginManager = () => {
           placeholder="Chọn khu"
           style={styles.dropdown}
           dropDownContainerStyle={styles.dropdownContainer}
-          zIndex={3000}
+          zIndex={2}
         />
 
         <Text style={[styles.label, styles.marginTop16]}>Vị trí</Text>
@@ -212,21 +214,14 @@ const LoginManager = () => {
           placeholder="Chọn vị trí"
           style={styles.dropdown}
           dropDownContainerStyle={styles.dropdownContainer}
-          zIndex={2000}
+          zIndex={1}
         />
 
         <TouchableOpacity style={styles.loginBtn} onPress={handleSubmit}>
           <Text style={styles.loginBtnText}>Đăng nhập</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => navigation.navigate('SignUp')}
-          style={styles.signupBtn}
-        >
-          <Text style={styles.signupText}>Chưa có tài khoản?</Text>
-        </TouchableOpacity>
       </KeyboardAvoidingView>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -324,15 +319,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: parseSizeWidth(16),
     fontWeight: '600',
-  },
-  signupBtn: {
-    marginTop: parseSizeHeight(20),
-    alignItems: 'center',
-  },
-  signupText: {
-    fontSize: parseSizeWidth(15),
-    color: '#3B82F6',
-    fontWeight: 'bold',
   },
   marginTop16: {
     marginTop: parseSizeHeight(16),

@@ -1,38 +1,48 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
   ScrollView,
   TouchableOpacity,
   Platform,
-  ActivityIndicator,
   StyleSheet,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import dayjs from 'dayjs';
 import { getStatisticalData } from '../../api';
 import MyHeader from '../../components/Header/MyHeader';
+import { useDispatch } from 'react-redux';
+import { setGlobalLoading } from '../../redux/slice/loadingSlice';
 
 const Report = () => {
+  const dispatch = useDispatch();
+
   const [fromDate, setFromDate] = useState(new Date());
   const [toDate, setToDate] = useState(new Date());
   const [showFromPicker, setShowFromPicker] = useState(false);
   const [showToPicker, setShowToPicker] = useState(false);
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
 
-  const fetchData = async (ngay, denngay) => {
-    setLoading(true);
-    const res = await getStatisticalData({ ngay, denngay });
-    setData(res);
-    setLoading(false);
-  };
+  const fetchData = useCallback(
+    async (ngay, denngay) => {
+      try {
+        dispatch(setGlobalLoading(true));
+        const res = await getStatisticalData({ ngay, denngay });
+        setData(res);
+      } catch (error) {
+        console.log('fetch data report error: ', error);
+      } finally {
+        dispatch(setGlobalLoading(false));
+      }
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
     const defaultFrom = dayjs().subtract(30, 'day').format('DD/MM/YYYY');
     const defaultTo = dayjs().format('DD/MM/YYYY');
     fetchData(defaultFrom, defaultTo);
-  }, []);
+  }, [fetchData]);
 
   const handleFilter = () => {
     const from = dayjs(fromDate).format('DD/MM/YYYY');
@@ -102,15 +112,8 @@ const Report = () => {
           />
         )}
 
-        {/* Loading */}
-        {loading && (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#2563eb" />
-          </View>
-        )}
-
         {/* Nội dung thống kê */}
-        {!loading && data && (
+        {data && (
           <>
             {/* Bệnh nhân */}
             <View style={styles.card}>
